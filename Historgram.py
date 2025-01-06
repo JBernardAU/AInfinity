@@ -42,5 +42,5 @@ def create_histogram(array, bin_size, x_range=None):
 
 # Example Usage:
 # Uncomment below lines to test with a sample N-dimensional array
-sample_array = np.random.randint(0, 100, size=(4, 5, 6))  # Example 3D array
-create_histogram(sample_array, bin_size=1)
+#sample_array = np.random.randint(0, 100, size=(4, 5, 6))  # Example 3D array
+#create_histogram(sample_array, bin_size=1)

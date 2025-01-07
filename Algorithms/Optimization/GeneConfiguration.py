@@ -12,14 +12,46 @@ class GeneConfiguration:
         :param gene_types: Array-like of types (e.g., 'int' or 'float') for each gene.
         """
         # Convert everything to NumPy arrays for easy indexing and validation
-        self.min_values = np.array(min_values)
-        self.max_values = np.array(max_values)
-        self.gene_types = np.array(gene_types, dtype=object)  # dtype=object to allow string storage
+        self._min_values = np.array(min_values)
+        self._max_values = np.array(max_values)
+        self._gene_types = np.array(gene_types, dtype=object)  # dtype=object to allow string storage
 
         # Validate that all arrays have the same shape
-        if (self.min_values.shape != self.max_values.shape or
-                self.min_values.shape != self.gene_types.shape):
+        if (self.min_values.shape != self._max_values.shape or
+                self.min_values.shape != self._gene_types.shape):
             raise ValueError("min_values, max_values, and gene_types must have the same shape.")
+
+    def get_min_value(self, index):
+        return self._min_values[index]
+
+    def set_min_value(self, index, value):
+        self._min_values[index] = value
+
+    def get_max_value(self, index):
+        return self._max_values[index]
+
+    def set_max_value(self, index, value):
+        self._max_values[index] = value
+
+    @property
+    def min_values(self):
+        """Return the min values array."""
+        return self._min_values
+
+    @min_values.setter
+    def min_values(self, new_min_values):
+        """Set the min values array."""
+        self._min_values = new_min_values
+
+    @property
+    def max_values(self):
+        """Return the max values array."""
+        return self._max_values
+
+    @max_values.setter
+    def max_values(self, new_max_values):
+        """Set the max values array ."""
+        self._max_values = new_max_values
 
     def __len__(self):
         return len(self.min_values)
@@ -33,8 +65,8 @@ class GeneConfiguration:
         """
         gene_sequence = []
         for min_val, max_val, gene_type in zip(self.min_values,
-                                               self.max_values,
-                                               self.gene_types):
+                                               self._max_values,
+                                               self._gene_types):
 
             if gene_type == "int":
                 # np.random.randint generates an integer in [low, high),

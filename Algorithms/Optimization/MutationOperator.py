@@ -21,11 +21,12 @@ class MutationOperator(ABC):
         self.gene_types = gene_types
 
     @abstractmethod
-    def mutate_individual(self, individual):
+    def mutate_individual(self, individual, forced=False):
         """
         Mutate a single individual. Must be overridden by subclasses.
 
         :param individual: A list/array representing the individual's genes.
+        :param forced: Determined if mutation should always occur regardless of mutation rate.
         :return: A potentially mutated version of the individual.
         """
         pass

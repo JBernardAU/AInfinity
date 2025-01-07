@@ -1,5 +1,5 @@
 import random
-from Algorithms.Optimization.MutationOperator import MutationOperator
+from Algorithms.Optimization.Evolutionary.MutationOperator import MutationOperator
 
 class SimpleMutation(MutationOperator):
     """

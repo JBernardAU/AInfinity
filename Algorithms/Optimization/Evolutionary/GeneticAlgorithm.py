@@ -1,7 +1,7 @@
 import numpy as np
 import importlib
 
-from Algorithms.Optimization.GeneConfiguration import GeneConfiguration
+from Algorithms.Optimization.Evolutionary.GeneConfiguration import GeneConfiguration
 
 class GeneticAlgorithm:
     def __init__(self, population_size, gene_configuration, fitness_function,
@@ -96,10 +96,10 @@ if __name__ == "__main__":
     max_vals = [10, 2.5, 10, 5.0]  # Maximum values for each gene
     gene_types = ["int", "float", "int", "float"]  # Mixed gene types
 
-    from Algorithms.Optimization.SimpleMutatation import SimpleMutation
-    from Algorithms.Optimization.Crossover import SinglePointCrossover
+    from Algorithms.Optimization.Evolutionary.SimpleMutatation import SimpleMutation
+    from Algorithms.Optimization.Evolutionary.Crossover import SinglePointCrossover
     from Algorithms.Fitness.SimpleSum import SimpleSum
-    from Algorithms.Optimization.EliteSurvival import EliteSurvival
+    from Algorithms.Optimization.Evolutionary.EliteSurvival import EliteSurvival
 
     # Instantiate a GeneConfiguration with mixed type constraints
     fitness_fn = SimpleSum()

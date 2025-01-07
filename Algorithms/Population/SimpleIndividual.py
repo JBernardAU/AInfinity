@@ -28,7 +28,7 @@ if __name__ == "__main__":
     gene_types = ["int", "float", "int", "float"]  # Mixed gene types
 
     from Algorithms.Fitness.SimpleSum import SimpleSum
-    from Algorithms.Optimization.SimpleMutatation import SimpleMutation
+    from Algorithms.Optimization.Evolutionary.SimpleMutatation import SimpleMutation
 
     fitness_fn = SimpleSum()
     mutation_op = SimpleMutation(

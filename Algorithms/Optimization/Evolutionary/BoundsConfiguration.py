@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class GeneConfiguration:
+class BoundsConfiguration:
     def __init__(self, min_values, max_values, gene_types):
         """
         Initialize the GeneConfiguration instance with arrays of min and max values,
@@ -14,11 +14,11 @@ class GeneConfiguration:
         # Convert everything to NumPy arrays for easy indexing and validation
         self._min_values = np.array(min_values)
         self._max_values = np.array(max_values)
-        self._gene_types = np.array(gene_types, dtype=object)  # dtype=object to allow string storage
+        self._value_types = np.array(gene_types, dtype=object)  # dtype=object to allow string storage
 
         # Validate that all arrays have the same shape
         if (self.min_values.shape != self._max_values.shape or
-                self.min_values.shape != self._gene_types.shape):
+                self.min_values.shape != self._value_types.shape):
             raise ValueError("min_values, max_values, and gene_types must have the same shape.")
 
     def get_min_value(self, index):
@@ -66,7 +66,7 @@ class GeneConfiguration:
         gene_sequence = []
         for min_val, max_val, gene_type in zip(self.min_values,
                                                self._max_values,
-                                               self._gene_types):
+                                               self._value_types):
 
             if gene_type == "int":
                 # np.random.randint generates an integer in [low, high),
@@ -92,7 +92,7 @@ if __name__ == "__main__":
     gene_types = ["int", "float", "int", "float"]  # Mixed gene types
 
     # Instantiate a GeneConfiguration with mixed type constraints
-    gene_config = GeneConfiguration(min_vals, max_vals, gene_types)
+    gene_config = BoundsConfiguration(min_vals, max_vals, gene_types)
 
     # Generate a gene sequence
     gene_sequence = gene_config.generate_gene()

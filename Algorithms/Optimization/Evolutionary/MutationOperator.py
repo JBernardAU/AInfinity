@@ -21,7 +21,7 @@ class MutationOperator(ABC):
         self.gene_types = gene_types
 
     @abstractmethod
-    def mutate_individual(self, individual, forced=False):
+    def mutate(self, individual, forced=False):
         """
         Mutate a single individual. Must be overridden by subclasses.
 

@@ -36,8 +36,8 @@ class SinglePointCrossover(Crossover):
         """
         if random.random() < self.crossover_rate:
             point = random.randint(1, self.gene_length - 1)
-            child1 = np.concatenate((parent1.values[:point], parent2.values[point:]))
-            child2 = np.concatenate((parent2.values[:point], parent1.values[point:]))
+            child1 = np.concatenate((parent1[:point], parent2[point:]))
+            child2 = np.concatenate((parent2[:point], parent1[point:]))
             return child1, child2
         return parent1, parent2
 

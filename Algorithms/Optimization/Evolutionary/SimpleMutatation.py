@@ -22,20 +22,19 @@ class SimpleMutation(MutationOperator):
         if not (len(self.min_values) == len(self.max_values) == len(self.gene_types)):
             raise ValueError("min_values, max_values, and gene_types must be of the same length.")
 
-    def mutate_individual(self, individual, forced=False):
+    def mutate(self, values, forced=False):
         """
-        Mutate a single individual. Each gene in the individual has a probability
-        of mutation_rate to be replaced with a new random value (int or float).
+        Mutate a single an array of values.
 
         :param forced:
-        :param individual: List/array representing the individual's genes.
+        :param values: An array/list of values
         :return: A new, potentially mutated, list of genes.
         """
-        if len(individual) != len(self.gene_types):
+        if len(values) != len(self.gene_types):
             raise ValueError("Length of individual genes must match gene_types.")
 
         new_individual = []
-        for i, current_value in enumerate(individual):
+        for i, current_value in enumerate(values):
             if random.random() < self.mutation_rate or forced:
                 # Mutate this gene
                 mutated_value = self._choose_random(
@@ -58,7 +57,7 @@ class SimpleMutation(MutationOperator):
         :param population: List of individuals. Each individual is a list of genes.
         :return: A new population (list of mutated or unmutated individuals).
         """
-        return [self.mutate_individual(ind, forced) for ind in population]
+        return [self.mutate(ind, forced) for ind in population]
 
     def _choose_random(self, min_val, max_val, gene_type):
         """

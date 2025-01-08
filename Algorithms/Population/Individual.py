@@ -1,3 +1,4 @@
+import copy
 from abc import ABC, abstractmethod
 
 class Individual(ABC):
@@ -21,6 +22,20 @@ class Individual(ABC):
         self._fitness_function = fitness_function
         self._mutation_op = mutator
         self.mutate_self()
+
+    def __len__(self):
+        return len(self._values)
+
+    def __deepcopy__(self, memo):
+        # Create a new instance and deeply copy attributes
+        new_copy = type(self)(
+            name=copy.deepcopy(self._name, memo),
+            values=copy.deepcopy(self._values, memo),
+            fitness=copy.deepcopy(self._fitness, memo),
+            fitness_function=copy.deepcopy(self._fitness_function, memo),
+            mutator=copy.deepcopy(self._mutation_op, memo),
+        )
+        return new_copy
 
     @property
     def name(self):
@@ -88,4 +103,4 @@ class Individual(ABC):
         This is just an example method that calls the mutator if one is available.
         """
         if self._mutation_op is not None:
-            self._values = self._mutation_op.mutate_individual(self._values, forced=True)
+            self._values = self._mutation_op.mutate(self._values, forced=True)

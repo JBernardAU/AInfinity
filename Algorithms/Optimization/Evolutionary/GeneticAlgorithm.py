@@ -1,5 +1,6 @@
 import numpy as np
 import importlib
+import copy
 
 from Algorithms.Optimization.Evolutionary.GeneConfiguration import GeneConfiguration
 
@@ -29,6 +30,7 @@ class GeneticAlgorithm:
             raise ImportError("The module does not define a class named '" + individual_type + "'.")
 
         self.best_individual = None
+        self.population = []
         self.population = self.initialize_population()
 
     def initialize_population(self):
@@ -45,14 +47,15 @@ class GeneticAlgorithm:
         """
         Evaluate the fitness of each individual in the population.
         """
-        fitness_scores = np.array([self.fitness_function.compute_fitness(ind.values) for ind in self.population])
-        self.best_individual = self.population[np.argmax(fitness_scores)]
-        return fitness_scores
+        for ind in self.population:
+            ind.fitness = self.fitness_function.compute_fitness(ind.values)
+        self.best_individual = max(self.population, key=lambda individual: individual.fitness)
 
-    def select_parents(self, fitness_scores):
+    def select_parents(self):
         """
         Select parents using roulette wheel selection.
         """
+        fitness_scores = [individual.fitness for individual in self.population]
         total_fitness = np.sum(fitness_scores)
         probabilities = fitness_scores / total_fitness
         parents_indices = np.random.choice(
@@ -60,7 +63,9 @@ class GeneticAlgorithm:
             size=self.population_size,
             p=probabilities
         )
-        return self.population[parents_indices]
+        # Deep copy the selected parents
+        selected_parents = [copy.deepcopy(self.population[i]) for i in parents_indices]
+        return selected_parents
 
     def crossover(self, parent1, parent2):
         """
@@ -69,25 +74,28 @@ class GeneticAlgorithm:
         parent1, parent2 = self.crossover(parent1, parent2)
         return parent1, parent2
 
-    def mutate(self, individual):
-        individual = self.mutator.mutate_individual(individual)
-        return individual
+    def mutate(self, values):
+        values = self.mutator.mutate(values)
+        return values
 
     def evolve(self):
         """
         Evolve the population over the specified number of generations.
         """
         for generation in range(self.generations):
-            fitness_scores = self.evaluate_fitness()
-            new_population = []
-            parents = self.select_parents(fitness_scores)
+            self.evaluate_fitness()
+            parents = self.select_parents()
             for i in range(0, self.population_size, 2):
                 parent1, parent2 = parents[i], parents[min(i + 1, self.population_size - 1)]
-                child1, child2 = self.crossover.crossover(parent1, parent2)
-                new_population.append(self.mutate(child1))
-                new_population.append(self.mutate(child2))
-            self.population = np.array(survival_strategy.apply_survival(new_population, self.population_size))
-            print(f"Generation {generation + 1}: Best Fitness = {np.max(fitness_scores)}")
+                child1, child2 = self.crossover.crossover(parent1.values, parent2.values)
+                self.mutate(child1)
+                self.mutate(child2)
+                parent1.values = child1
+                parent2.values = child2
+                self.population = np.append(self.population, parent1)
+                self.population = np.append(self.population, parent2)
+            self.population = np.array(survival_strategy.apply_survival(self.population, self.population_size))
+            print(f"Generation {generation + 1}: Best Fitness = {self.best_individual.fitness}")
         return self.best_individual
 
 # Example usage:
@@ -130,4 +138,4 @@ if __name__ == "__main__":
     # Run the algorithm
     best_solution = ga.evolve()
     print("Best Solution Found:", best_solution)
-    print("Fitness of Best Solution:", ga.fitness_function(best_solution))
+    print("Fitness of Best Solution:", ga.fitness_function.compute_fitness(best_solution.values))

@@ -1,5 +1,5 @@
 import random
-from Algorithms.Optimization.Evolutionary.SurvivalStrategy import SurvivalStrategy
+from Algorithms.Optimization.Evolutionary.Operators.SurvivalStrategy import SurvivalStrategy
 
 class EliteSurvival(SurvivalStrategy):
     """
